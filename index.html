@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png">
+<title>Italiano Fácil — Curso completo</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--txt:#18212b;--muted:#5d6874;--blue:#2457d6;--soft:#edf2ff;--green:#137a45;--red:#b42318;--line:#d9dee5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:18px;line-height:1.55}
+body.large{font-size:22px}body.large .it{font-size:36px}body.contrast{--bg:#fff;--card:#fff;--txt:#000;--muted:#111;--blue:#0039b8}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line)}
+.wrap,main{max-width:1100px;margin:auto;padding:16px 20px}h1{font-size:clamp(28px,5vw,42px);margin:0}h2{font-size:clamp(26px,4vw,35px);margin:.2em 0}h3{font-size:24px}
+.top{display:flex;justify-content:space-between;gap:15px;align-items:center}.small{font-size:15px;color:var(--muted)}
+.progress{height:13px;background:#e3e6eb;border-radius:99px;overflow:hidden;margin-top:12px}.bar{height:100%;background:var(--blue);width:0}
+nav{display:flex;gap:7px;overflow:auto;padding:10px 0}.navbtn{white-space:nowrap}
+button{font:inherit;border:0;border-radius:12px;padding:11px 16px;background:var(--blue);color:white;cursor:pointer}button.secondary{background:#e8ebef;color:var(--txt)}
+button.big{font-size:21px;padding:14px 19px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:16px 0;box-shadow:0 2px 7px #00000008}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.word{border:1px solid var(--line);border-radius:14px;padding:16px}.it{font-size:30px;font-weight:750}.muted{color:var(--muted)}
+.dialogue{background:var(--soft);border-left:5px solid var(--blue);padding:12px 15px;margin:8px 0;border-radius:8px}
+.choice{display:block;width:100%;text-align:left;background:#fff;color:var(--txt);border:2px solid var(--line);margin:9px 0}.correct{background:#eaf7ef!important;border-color:var(--green)!important}.wrong{background:#fff0ee!important;border-color:var(--red)!important}
+.feedback{font-weight:700;margin-top:10px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{background:#eef1f5;color:var(--txt);border-radius:99px;padding:6px 11px}
+.actions{display:flex;flex-wrap:wrap;gap:9px}.install{display:none}.score{font-size:22px;font-weight:700}
+textarea,input[type=text]{font:inherit;width:100%;padding:12px;border:2px solid var(--line);border-radius:10px}
+footer{padding:30px;text-align:center;color:var(--muted)}
+@media(max-width:650px){.wrap,main{padding:13px}.top{display:block}.actions button{width:100%}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="top"><div><h1>🇮🇹 Italiano Fácil</h1><div class="small">Curso completo de italiano para aprender con calma.</div></div><div class="score" id="score">0 puntos</div></div>
+<div class="actions" style="margin-top:10px">
+<button class="install" id="install">📲 Instalar</button><button class="secondary" id="large">🔎 Letra grande</button><button class="secondary" id="contrast">◐ Contraste</button>
+<label class="secondary" style="padding:11px 15px;border-radius:12px">🔊 Velocidad <input id="rate" type="range" min=".5" max="1.05" step=".05" value=".72"></label>
+</div>
+<nav id="nav"></nav><div class="progress"><div id="bar" class="bar"></div></div><div id="ptxt" class="small"></div>
+</div></header>
+<main id="app"></main>
+<footer>Italiano Fácil · Progreso guardado automáticamente en este dispositivo.</footer>
+<script>
+const lessons=[
+["1. Alfabeto y sonidos","Aprende las vocales, el alfabeto y algunos sonidos que cambian respecto al español.",
+[["A","a"],["E","e"],["I","i"],["O","o"],["U","u"],["casa","casa"],["che","que"],["chi","quién"]],"CHE y CHI conservan el sonido fuerte de la C. En italiano las vocales se pronuncian con claridad.",
+[["¿Qué palabra significa «casa»?","casa","sole","luna"],["¿Qué sonido mantiene «chi»?","k","ch","j"]]],
+["2. Saludos y cortesía","Aprende a saludar, despedirte y presentarte.",
+[["Ciao","Hola / adiós"],["Buongiorno","Buenos días"],["Buonasera","Buenas tardes/noches"],["Arrivederci","Adiós"],["Grazie","Gracias"],["Prego","De nada"],["Per favore","Por favor"],["Scusi","Disculpe"]],
+"«Ciao» es informal. «Buongiorno», «Buonasera» y «Arrivederci» son útiles en situaciones más formales.",
+[["¿Cómo dices «Gracias»?","Grazie","Prego","Scusi"],["¿Cómo dices «Por favor»?","Per favore","Arrivederci","Ciao"]]],
+["3. Presentarse","Di tu nombre, pregunta el nombre de otra persona y usa «piacere».",
+[["Mi chiamo...","Me llamo..."],["Come si chiama?","¿Cómo se llama?"],["Come ti chiami?","¿Cómo te llamas?"],["Piacere","Encantado/a"],["Sono...","Soy..."],["Sono italiano/a","Soy italiano/a"]],
+"«Mi chiamo» es una expresión muy habitual para decir el nombre.",
+[["Completa: «Mi ___ Anna».","chiamo","chiami","chiama"],["«Piacere» significa:","Encantado/a","Hasta mañana","Perdón"]]],
+["4. Números","Practica números para compras, teléfonos, direcciones y edades.",
+[["uno","1"],["due","2"],["tre","3"],["quattro","4"],["cinque","5"],["sei","6"],["sette","7"],["otto","8"],["nove","9"],["dieci","10"],["venti","20"],["cento","100"]],
+"Conviene aprender primero 1–10 y después formar números mayores. Repite en voz alta.",
+[["¿Cómo se dice 5?","cinque","sette","dieci"],["¿Cómo se dice 10?","dieci","due","otto"]]],
+["5. Edad y familia","Habla de tu edad y de las personas de la familia.",
+[["Ho ... anni","Tengo ... años"],["madre","madre"],["padre","padre"],["figlio","hijo"],["figlia","hija"],["fratello","hermano"],["sorella","hermana"],["marito","marido"],["moglie","esposa"]],
+"Para la edad se usa AVERE: «Ho settanta anni». No se usa ESSERE.",
+[["¿Cómo dices «Tengo 70 años»?","Ho settanta anni","Sono settanta anni","È settanta anni"],["sorella significa:","hermana","hermano","hija"]]],
+["6. La casa","Vocabulario de las habitaciones y objetos cotidianos.",
+[["casa","casa"],["cucina","cocina"],["camera","habitación"],["bagno","baño"],["porta","puerta"],["finestra","ventana"],["tavolo","mesa"],["sedia","silla"],["letto","cama"]],
+"Practica con frases: «La cucina», «il bagno», «la porta», «il tavolo».",
+[["¿Qué significa «bagno»?","baño","cocina","cama"],["¿Qué significa «finestra»?","ventana","puerta","mesa"]]],
+["7. Comida y restaurante","Aprende a pedir comida y bebida con educación.",
+[["acqua","agua"],["pane","pan"],["caffè","café"],["latte","leche"],["pasta","pasta"],["mela","manzana"],["Vorrei...","Quisiera..."],["Il conto, per favore","La cuenta, por favor"]],
+"«Vorrei» es una forma amable: «Vorrei un caffè, per favore».",
+[["«Vorrei un caffè» significa:","Quisiera un café","Tengo un café","Quiero pagar"],["¿Cómo pides la cuenta?","Il conto, per favore","La casa, per favore","Il pane, per favore"]]],
+["8. Artículos y género","Aprende artículos básicos y singular/plural.",
+[["il libro","el libro"],["lo studente","el estudiante"],["la casa","la casa"],["l'amico","el amigo"],["i libri","los libros"],["gli amici","los amigos"],["le case","las casas"],["un uomo","un hombre"],["una donna","una mujer"]],
+"Observa las parejas: il libro/i libri; la casa/le case. Hay reglas y excepciones, que iremos practicando.",
+[["Plural de «la casa»:","le case","i case","gli case"],["Plural de «il libro»:","i libri","le libri","gli libri"]]],
+["9. Essere y avere","Dos verbos esenciales para hablar de identidad, estado y posesión.",
+[["sono","soy/estoy"],["sei","eres/estás"],["è","es/está"],["siamo","somos/estamos"],["siete","sois/estáis"],["ho","tengo"],["hai","tienes"],["ha","tiene"],["abbiamo","tenemos"],["hanno","tienen"]],
+"ESSERE: sono, sei, è, siamo, siete, sono. AVERE: ho, hai, ha, abbiamo, avete, hanno.",
+[["«Tengo un libro»:","Ho un libro","Sono un libro","Ha un libro"],["«Ella es italiana»:","Lei è italiana","Lei ha italiana","Lei sono italiana"]]],
+["10. Presente","Habla de acciones actuales y hábitos.",
+[["parlare","hablar"],["parlo","hablo"],["mangiare","comer"],["mangio","como"],["vivere","vivir"],["vivo","vivo"],["andare","ir"],["vado","voy"],["fare","hacer"],["faccio","hago"]],
+"En muchos verbos regulares, «io» termina en -o: parlo, mangio, vivo. Hay verbos irregulares muy frecuentes como andare y fare.",
+[["«Yo hablo italiano»:","Parlo italiano","Parla italiano","Ho italiano"],["«Voy a casa»:","Vado a casa","Sono a casa","Faccio casa"]]],
+["11. Pasado — passato prossimo","Habla de acciones terminadas: ayer, esta mañana, el fin de semana.",
+[["ho mangiato","he comido / comí"],["ho parlato","he hablado / hablé"],["ho visto","he visto / vi"],["ho fatto","he hecho / hice"],["sono andato/a","he ido / fui"],["ieri","ayer"],["stamattina","esta mañana"]],
+"El passato prossimo suele formarse con AVERE o ESSERE + participio: «ho mangiato», «sono andato».",
+[["«Ayer comí pasta»:","Ieri ho mangiato la pasta","Ieri mangio la pasta","Ieri mangerò la pasta"],["«He ido a casa» (hablante masculino):","Sono andato a casa","Ho andato a casa","Sono andare a casa"]]],
+["12. Futuro","Habla de planes y acciones futuras.",
+[["domani","mañana"],["andrò","iré"],["farò","haré"],["mangerò","comeré"],["parlerò","hablaré"],["vedrò","veré"],["sarò","seré/estaré"],["avrò","tendré"]],
+"Para «io», muchas formas del futuro terminan en -ò: parlerò, mangerò. Algunos verbos tienen formas especiales: andrò, farò, sarò, avrò.",
+[["«Mañana iré a casa»:","Domani andrò a casa","Domani vado a casa ieri","Domani sono a casa"],["«Haré un café»:","Farò un caffè","Ho fatto un caffè","Faccio ieri un caffè"]]],
+["13. Negación y preguntas","Aprende a decir «no», pedir información y aclarar dudas.",
+[["non","no"],["Non capisco","No entiendo"],["Non lo so","No lo sé"],["Dove?","¿Dónde?"],["Quando?","¿Cuándo?"],["Come?","¿Cómo?"],["Perché?","¿Por qué?"],["Quanto costa?","¿Cuánto cuesta?"]],
+"«Non» suele colocarse delante del verbo: «Non capisco», «Non lo so».",
+[["¿Cómo dices «No entiendo»?","Non capisco","Non costa","Non vado"],["«Dove?» significa:","¿Dónde?","¿Cuándo?","¿Por qué?"]]],
+["14. Conversaciones cotidianas","Une todo lo aprendido en situaciones reales.",
+[["Dov'è la stazione?","¿Dónde está la estación?"],["Quanto costa?","¿Cuánto cuesta?"],["Può ripetere?","¿Puede repetir?"],["Parli lentamente, per favore.","Hable despacio, por favor."],["Non capisco.","No entiendo."],["Va bene.","Está bien."],["A domani!","¡Hasta mañana!"],["A presto!","¡Hasta pronto!"]],
+"Cuando no entiendas, puedes decir «Può ripetere, per favore?» y «Parli lentamente, per favore».",
+[["¿Cómo pides que repitan?","Può ripetere?","Dove costa?","Va bene?"],["¿Cómo dices «Hasta mañana»?","A domani!","A presto!","Buongiorno!"]]]
+];
+
+const dialogues=[
+[["Cliente","Buongiorno. Vorrei un caffè, per favore."],["Barista","Certo. Altro?"],["Cliente","No, grazie. Quanto costa?"],["Barista","Due euro."],["Cliente","Grazie."],["Barista","Prego!"]],
+[["Persona A","Buongiorno! Come si chiama?"],["Persona B","Mi chiamo Maria. Piacere!"],["Persona A","Piacere! Di dove è?"],["Persona B","Sono italiana."]],
+[["Turista","Scusi, dov'è la stazione?"],["Persona","È di là."],["Turista","Può ripetere, per favore?"],["Persona","Sì. La stazione è di là."],["Turista","Grazie!"],["Persona","Prego!"]]
+];
+let cur=+localStorage.getItem("if_cur")||0, completed=JSON.parse(localStorage.getItem("if_completed")||"[]"), points=+localStorage.getItem("if_points")||0, deferred=null;
+const app=document.getElementById("app"),nav=document.getElementById("nav");
+function speak(s){let u=new SpeechSynthesisUtterance(s);u.lang="it-IT";u.rate=+document.getElementById("rate").value;speechSynthesis.cancel();speechSynthesis.speak(u)}
+function save(){localStorage.setItem("if_cur",cur);localStorage.setItem("if_completed",JSON.stringify(completed));localStorage.setItem("if_points",points)}
+function update(){document.getElementById("bar").style.width=(completed.length/lessons.length*100)+"%";document.getElementById("ptxt").textContent=`${completed.length} de ${lessons.length} lecciones completadas · ${points} puntos`;document.getElementById("score").textContent=points+" puntos"}
+function renderNav(){nav.innerHTML=lessons.map((x,i)=>`<button class="navbtn ${i===cur?'':'secondary'}" onclick="go(${i})">${completed.includes(i)?'✓ ':''}${i+1}</button>`).join("")}
+function render(){
+let l=lessons[cur];let words=l[2],qs=l[4];
+app.innerHTML=`<div class="card"><div class="small">LECCIÓN ${cur+1} DE ${lessons.length}</div><h2>${l[0]}</h2><p>${l[1]}</p><button class="big" onclick="speak(${JSON.stringify(l[1])})">🔊 Escuchar explicación</button></div>
+<div class="card"><h3>📖 Vocabulario</h3><div class="grid">${words.map(w=>`<div class="word"><div class="it">${w[0]}</div><div class="muted">${w[1]}</div><button onclick="speak(${JSON.stringify(w[0])})">🔊 Escuchar</button></div>`).join("")}</div></div>
+<div class="card"><h3>👩‍🏫 Regla fácil</h3><p>${l[3]}</p><button onclick="speak(${JSON.stringify(l[3])})">🔊 Escuchar</button></div>
+<div class="card"><h3>🗣️ Conversación</h3>${dialogues[cur%dialogues.length].map(d=>`<div class="dialogue"><b>${d[0]}:</b> ${d[1]} <button onclick="speak(${JSON.stringify(d[1])})">🔊</button></div>`).join("")}<p class="small">Consejo: escucha cada frase dos veces y luego repítela tú.</p></div>
+<div class="card"><h3>✏️ Ejercicios</h3>${qs.map((q,qi)=>`<div class="exercise"><p><b>${qi+1}.</b> ${q[0]}</p>${q.slice(1).map((a,ai)=>`<button class="choice" onclick="answer(this,${ai===0},${qi})">${a}</button>`).join("")}<div id="f${qi}" class="feedback"></div></div>`).join("")}</div>
+<div class="card"><h3>🧠 Repaso oral</h3><p>Lee estas frases en voz alta. Después pulsa el altavoz para comprobar la pronunciación.</p>${words.slice(0,Math.min(5,words.length)).map(w=>`<div class="dialogue"><b>${w[0]}</b> — ${w[1]} <button onclick="speak(${JSON.stringify(w[0])})">🔊</button></div>`).join("")}</div>
+<div class="actions"><button class="secondary" onclick="go(${Math.max(0,cur-1)})">← Anterior</button><button onclick="finishLesson()">✓ Terminar lección</button><button onclick="go(${Math.min(lessons.length-1,cur+1)})">Siguiente →</button></div>`;
+renderNav();update();window.scrollTo({top:0,behavior:"smooth"})
+}
+function answer(btn,ok,qi){let box=document.getElementById("f"+qi);document.querySelectorAll(".exercise")[qi].querySelectorAll(".choice").forEach(x=>x.disabled=true);btn.classList.add(ok?"correct":"wrong");box.textContent=ok?"¡Muy bien! +10 puntos":"No pasa nada. Repasa la explicación y vuelve a intentarlo.";if(ok){points+=10;save();update()}}
+function finishLesson(){if(!completed.includes(cur)){completed.push(cur);points+=20;save()}update();renderNav();alert("Lección completada. ¡Muy bien!")}
+function go(i){cur=Math.max(0,Math.min(lessons.length-1,i));save();render()}
+document.getElementById("large").onclick=()=>document.body.classList.toggle("large");
+document.getElementById("contrast").onclick=()=>document.body.classList.toggle("contrast");
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;document.getElementById("install").style.display="inline-block"});
+document.getElementById("install").onclick=async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null}};
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js");
+render();
+</script></body></html>
