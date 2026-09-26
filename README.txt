@@ -1,20 +1,8 @@
-ITALIANO FÁCIL — CURSO COMPLETO
-================================
-Esta versión incluye:
-- 14 lecciones progresivas.
-- Vocabulario y pronunciación mediante voz italiana del navegador.
-- Explicaciones sencillas en español.
-- Conversaciones prácticas.
-- Ejercicios de opción múltiple.
-- Sistema de puntos y lecciones completadas.
-- Guardado automático del progreso.
-- Letra grande y alto contraste.
-- Botón de instalación PWA.
-- Caché para uso sin conexión después de la primera carga, en navegadores compatibles.
+ITALIANO FÁCIL v2
+18 lecciones, vocabulario, ejercicios, puntos, progreso y PWA.
+El audio usa la voz italiana del navegador/dispositivo. Si no funciona,
+prueba Chrome o Edge y comprueba que haya una voz italiana instalada.
 
-Para instalarla como aplicación, debe estar publicada mediante HTTPS.
-Android/Chrome: Instalar aplicación o Añadir a pantalla de inicio.
-iPhone/iPad: Safari > Compartir > Añadir a pantalla de inicio.
-Windows/Mac: Chrome/Edge > icono de instalación cuando aparezca.
-
-NOTA: La pronunciación utiliza SpeechSynthesis del dispositivo; las voces disponibles dependen del sistema operativo y navegador.
+Para actualizar GitHub Pages, sustituye los archivos de la versión anterior
+por index.html, manifest.webmanifest y sw.js. Mantén los iconos actuales si
+los tienes; después espera unos minutos y recarga la página.
