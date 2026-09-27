@@ -1,8 +1,9 @@
-ITALIANO FÁCIL v2
-18 lecciones, vocabulario, ejercicios, puntos, progreso y PWA.
-El audio usa la voz italiana del navegador/dispositivo. Si no funciona,
-prueba Chrome o Edge y comprueba que haya una voz italiana instalada.
+ITALIANO FÁCIL — VERSIÓN 3
 
-Para actualizar GitHub Pages, sustituye los archivos de la versión anterior
-por index.html, manifest.webmanifest y sw.js. Mantén los iconos actuales si
-los tienes; después espera unos minutos y recarga la página.
+- Capítulos en cualquier orden.
+- Puedes repetir cualquier capítulo aunque esté completado.
+- El capítulo no se marca automáticamente.
+- Tú decides cuándo pulsar “Marcar capítulo como completado”.
+- Los capítulos completados siguen disponibles para estudiar.
+- Se conserva el audio con voz italiana.
+- Se conserva el tamaño de letra, alto contraste, puntos y progreso.

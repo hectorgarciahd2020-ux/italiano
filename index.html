@@ -14,7 +14,7 @@ table{border-collapse:collapse;width:100%}th,td{border:1px solid #111;padding:8p
 <header><h1>🇮🇹 Italiano Fácil</h1><div class="big">Curso práctico de italiano</div>
 <div class="nav"><button onclick="font(2)">Aumentar letra</button><button onclick="font(-2)">Reducir letra</button>
 <button onclick="contrast()">Alto contraste</button><button id="install" hidden>Instalar aplicación</button></div></header>
-<main><div class="card"><b id="prog"></b><div id="nav" class="nav"></div></div>
+<main><div class="card"><b id="prog"></b><p>Elige cualquier capítulo. Puedes repetirlos y cambiar de capítulo libremente.</p><div id="nav" class="nav"></div></div>
 <div id="audio" class="status">Audio: comprobando voces italianas...</div><div id="app"></div></main>
 <script>
 const L=[
@@ -51,10 +51,10 @@ function finish(i){if(!done.includes(i)){done.push(i);pts+=20;localStorage.done=
 function answer(b,ok){b.parentElement.querySelectorAll("button").forEach(x=>x.disabled=true);b.textContent=ok?"✓ Correcto":"✗ Incorrecto";if(ok){pts+=10;localStorage.pts=pts}renderProg()}
 function renderProg(){document.getElementById("prog").textContent=`Lecciones completadas: ${done.length}/${L.length} · Puntos: ${pts}`}
 function render(){let nav=document.getElementById("nav"),app=document.getElementById("app");nav.innerHTML="";app.innerHTML="";
-L.forEach((x,i)=>{let b=document.createElement("button");b.textContent=(done.includes(i)?"✓ ":"")+(i+1);b.onclick=()=>show(i);nav.appendChild(b);
+L.forEach((x,i)=>{let b=document.createElement("button");b.textContent=(done.includes(i)?"✓ ":"")+(i+1);b.title=done.includes(i)?"Capítulo completado. Puedes volver a estudiarlo cuando quieras.":"Abrir capítulo "+(i+1);b.onclick=()=>show(i);nav.appendChild(b);
 let s=document.createElement("section");s.id="l"+i;s.className="lesson";s.innerHTML=`<div class="card"><h2>${x[0]}</h2><p class="big">${i===0?"Aprende paso a paso. Cada palabra tiene un botón de audio.": "Practica y escucha las frases en italiano."}</p><table><tr><th>Italiano</th><th>Español</th><th>Audio</th></tr>`;
 x[1].forEach(w=>s.innerHTML+=`<tr><td class="italian">${w[0]}</td><td>${w[1]}</td><td><button onclick='speak(${JSON.stringify(w[0])})'>🔊 Escuchar</button></td></tr>`);
-s.innerHTML+=`</table><h3>Mini ejercicio</h3><p>¿Qué significa <b>${x[1][0][0]}</b>?</p><button class="option" onclick="answer(this,true)">${x[1][0][1]}</button><button class="option" onclick="answer(this,false)">Mañana</button><button class="option" onclick="answer(this,false)">Gracias</button><br><button onclick="finish(${i})">✓ Terminar lección</button></div>`;
+s.innerHTML+=`</table><h3>Mini ejercicio</h3><p>¿Qué significa <b>${x[1][0][0]}</b>?</p><button class="option" onclick="answer(this,true)">${x[1][0][1]}</button><button class="option" onclick="answer(this,false)">Mañana</button><button class="option" onclick="answer(this,false)">Gracias</button><br><button onclick="finish(${i})">${done.includes(i)?"✓ Capítulo completado":"✓ Marcar capítulo como completado"}</button><p class="status">${done.includes(i)?"Este capítulo está marcado como completado, pero puedes estudiarlo de nuevo todas las veces que quieras.":"Puedes marcarlo como completado cuando tú decidas. No se marca automáticamente."}</p></div>`;
 app.appendChild(s)});renderProg();show(+localStorage.last||0)}
 render();
 let dp;addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;install.hidden=false});
